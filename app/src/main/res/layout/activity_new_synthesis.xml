@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawerLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".InfoContactsActivity">
+
+        <!-- Верхняя панель (header / toolbar) -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="@color/header_backgroud"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#00000000"
+                android:scaleType="centerCrop"
+                android:src="@drawable/flask"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/linearLayout2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imageButton"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_protext_regular"
+                    android:text="PeptideSynth Pro"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Advanced Synthesis Control"
+                    style="@style/SecondaryText"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:backgroundTint="#00000000"
+                android:scaleType="center"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:src="@drawable/man_avatar_woman_account_people_person_male_interface_profile_user_icon_259529__1_"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnMenu"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btnMenu"
+                android:layout_width="54dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="#00000000"
+                android:scaleType="center"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:src="@drawable/ic_menu"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Разделительная линия под шапкой -->
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@color/devide_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/shape_blocks"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout">
+
+            <TextView
+                android:id="@+id/textView3"
+                style="@style/HeaderText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Текущая программа"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/iv_iconPulse"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:maxHeight="50dp"
+                android:src="@drawable/ic_pulse"
+                app:layout_constraintBottom_toBottomOf="@+id/textView3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/iconsBiruza" />
+
+            <TextView
+                android:id="@+id/textView4"
+                style="@style/BaseText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:text="ACTH(1-24)"
+                app:layout_constraintBottom_toTopOf="@+id/textView5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/BaseText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:text="Последнее обновление"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView4" />
+
+            <TextView
+                style="@style/SecondaryText"
+                android:layout_width="116dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="38dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:text="11.11.2025 22:34"
+                android:textSize="14dp"
+                app:flow_horizontalAlign="end"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView5"
+                app:layout_constraintTop_toTopOf="@+id/textView5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/shape_blocks"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout2">
+
+            <TextView
+                android:id="@+id/textView6"
+                style="@style/HeaderText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Строка команд"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/iv_iconCommand"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:maxHeight="50dp"
+                android:src="@drawable/ic_command"
+                app:layout_constraintBottom_toBottomOf="@+id/textView6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/iconsBiruza" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView6" />
+
+            <com.google.android.material.button.MaterialButton
+                android:visibility="gone"
+                android:id="@+id/btn_pause"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Пауза"
+
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                app:backgroundTint="@color/orange"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_pause"
+                app:iconGravity="textEnd"
+                app:iconPadding="6dp"
+                app:iconSize="24sp"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/btn_stop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
+
+            <com.google.android.material.button.MaterialButton
+                android:visibility="gone"
+                android:id="@+id/btn_stop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+
+                android:text="Стоп"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                app:backgroundTint="@color/red"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_stop"
+                app:iconGravity="textEnd"
+                app:iconPadding="8dp"
+                app:iconSize="24sp"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_pause" />
+
+            <com.google.android.material.button.MaterialButton
+
+                android:id="@+id/btn_new_synthesis"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Начать синтез"
+
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                app:backgroundTint="@color/iconsBiruza"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_play"
+                app:iconGravity="textEnd"
+                app:iconPadding="6dp"
+                app:iconSize="24sp"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+    <LinearLayout
+        android:id="@+id/right_drawer"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical"
+        android:background="@color/background"
+        android:paddingTop="56dp"
+        android:paddingBottom="24dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:elevation="12dp">
+
+        <!-- Заголовок меню -->
+        <TextView
+            android:id="@+id/menuTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Меню"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"
+            android:layout_marginStart="26dp"
+            android:fontFamily="@font/sf_protext_bold"
+            android:textColor="@color/iconsBiruza" />
+
+        <!-- Пункт меню -->
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dashboard"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sf_protext_semibold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Главная"
+            android:textColor="@color/textSecondary"
+            android:textSize="15sp"
+            android:textAlignment="viewStart"
+            app:backgroundTint="#00000000"
+
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_home"
+            app:iconGravity="textStart"
+            app:iconPadding="4dp"
+            app:iconSize="22sp"
+            app:iconTint="@color/textSecondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_protext_semibold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Обучение"
+            android:textColor="@color/textSecondary"
+            android:textSize="15sp"
+            android:textAlignment="viewStart"
+            android:backgroundTint="#00000000"
+
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_book"
+            app:iconGravity="textStart"
+            app:iconPadding="4dp"
+            app:iconSize="22sp"
+            app:iconTint="@color/textSecondary"
+            android:id="@+id/training"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_protext_semibold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Синтез"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textAlignment="viewStart"
+            android:backgroundTint="@color/iconsBiruza"
+
+            app:cornerRadius="10dp"
+            app:icon="@drawable/flask"
+            app:iconGravity="textStart"
+            app:iconPadding="4dp"
+            app:iconSize="22sp"
+            app:iconTint="@color/white"
+            android:id="@+id/synthesis"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sf_protext_semibold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="Информация и контакты"
+            android:textColor="@color/textSecondary"
+            android:textSize="15sp"
+            android:textAlignment="viewStart"
+            android:backgroundTint="#00000000"
+
+            app:cornerRadius="10dp"
+            app:icon="@drawable/ic_info"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            app:iconSize="22sp"
+            app:iconTint="@color/textSecondary"
+            android:id="@+id/infoContacts"/>
+    </LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
