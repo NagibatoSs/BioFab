@@ -185,7 +185,8 @@
             app:iconTint="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/btn_docs"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_docs"
@@ -276,6 +277,39 @@
                 app:layout_constraintTop_toBottomOf="@id/playerView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--        <LinearLayout-->
+<!--            android:background="@drawable/shape_blocks"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginBottom="20dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="16dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutVideos"-->
+<!--            app:layout_constraintBottom_toTopOf="@id/constraintLayout3">-->
+
+<!--            <include layout="@layout/faq_item" />-->
+
+<!--            <include layout="@layout/faq_item" />-->
+
+<!--            <include layout="@layout/faq_item" />-->
+
+<!--            <include layout="@layout/faq_item" />-->
+
+<!--        </LinearLayout>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:paddingBottom="16dp"
+            android:background="@drawable/shape_blocks"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutVideos" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

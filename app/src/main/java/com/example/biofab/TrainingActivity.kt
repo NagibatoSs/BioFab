@@ -1,5 +1,7 @@
 package com.example.biofab
 
+import FaqAdapter
+import FaqItem
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -13,6 +15,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.example.biofab.databinding.ActivityMainBinding
 import com.example.biofab.databinding.ActivityTrainingBinding
 import androidx.media3.ui.PlayerView
+import androidx.recyclerview.widget.LinearLayoutManager
 
 class TrainingActivity : AppCompatActivity() {
     private var _binding: ActivityTrainingBinding? = null
@@ -32,6 +35,9 @@ class TrainingActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        //FAQ
+        setFaq()
 
         val playerView = findViewById<PlayerView>(R.id.playerView)
 
@@ -76,5 +82,22 @@ class TrainingActivity : AppCompatActivity() {
         } else {
             binding.drawerLayout.openDrawer(GravityCompat.END)
         }
+    }
+
+    private fun setFaq(){
+        val list = listOf(
+            FaqItem("Почему не подключается к синтезатору?", "Проверьте питание и Bluetooth синтезатора, а также разрешение на телефоне."),
+            FaqItem("Как начать синтез?", "В разделе «Синтез» нажмите «Начать синтез». Или нажмите «Новый синтез» на главной странице."),
+            FaqItem("Где найти инструкцию?", "Смотрите раздел «Обучение»."),
+            FaqItem("Сколько длится синтез?", "Время зависит от протокола, указывается перед запуском."),
+            FaqItem("Как остановить синтез?", "В разделе «Синтез» нажмите кнопку «Стоп» для полного завершения процесса или «Пауза» для приостановки процесса синтеза."),
+            FaqItem("Почему не приходят уведомления?", "Проверьте настройки телефона и приложения.")
+        )
+
+        val adapter = FaqAdapter(list)
+
+        val rv = binding.recyclerView
+        rv.layoutManager = LinearLayoutManager(this)
+        rv.adapter = adapter
     }
 }
