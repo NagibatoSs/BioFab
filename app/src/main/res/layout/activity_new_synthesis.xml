@@ -207,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Строка команд"
+                android:text="Командная строка"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
             <ImageView
@@ -224,6 +224,7 @@
                 app:tint="@color/iconsBiruza" />
 
             <com.google.android.material.textfield.TextInputEditText
+                android:hint="start"
                 android:id="@+id/textInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -234,6 +235,34 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView6" />
+
+            <com.google.android.material.button.MaterialButton
+                android:visibility="gone"
+                android:id="@+id/btn_resume"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Возобновить"
+
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                app:backgroundTint="@color/orange"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_pause"
+                app:iconGravity="textEnd"
+                app:iconPadding="6dp"
+                app:iconSize="24sp"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/btn_stop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
 
             <com.google.android.material.button.MaterialButton
                 android:visibility="gone"
@@ -264,7 +293,6 @@
                 app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
 
             <com.google.android.material.button.MaterialButton
-                android:visibility="gone"
                 android:id="@+id/btn_stop"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -274,10 +302,11 @@
                 android:fontFamily="@font/sf_protext_semibold"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-
                 android:text="Стоп"
+
                 android:textColor="@color/white"
                 android:textSize="18dp"
+                android:visibility="gone"
                 app:backgroundTint="@color/red"
                 app:cornerRadius="10dp"
                 app:icon="@drawable/ic_stop"
@@ -287,11 +316,10 @@
                 app:iconTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_pause" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-
+                android:visibility="visible"
                 android:id="@+id/btn_new_synthesis"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

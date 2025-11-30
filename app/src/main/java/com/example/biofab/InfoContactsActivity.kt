@@ -1,6 +1,7 @@
 package com.example.biofab
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -44,6 +45,11 @@ class InfoContactsActivity : AppCompatActivity() {
         }
         binding.btnMenu.setOnClickListener {
             openMenu()
+        }
+        binding.btnFeedback.setOnClickListener {
+            val url = "https://forms.yandex.ru/u/6928326deb6146085d900829"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
         }
     }
     private fun openMenu(){

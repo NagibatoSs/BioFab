@@ -3,13 +3,17 @@ package com.example.biofab
 import FaqAdapter
 import FaqItem
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.biofab.databinding.ActivityMainBinding
@@ -70,6 +74,18 @@ class TrainingActivity : AppCompatActivity() {
         binding.infoContacts.setOnClickListener {
             val intent = Intent(this, InfoContactsActivity::class.java)
             startActivity(intent)
+        }
+        binding.btnVideos.setOnClickListener {
+            binding.constraintLayoutVideos.isVisible = true
+            binding.recyclerView.isGone = true;
+            binding.btnVideos.setBackgroundColor(ContextCompat.getColor(this, R.color.iconsBiruza))
+            binding.btnFAQ.setBackgroundColor(ContextCompat.getColor(this, R.color.textSecondary))
+        }
+        binding.btnFAQ.setOnClickListener {
+            binding.constraintLayoutVideos.isGone = true;
+            binding.recyclerView.isVisible = true
+            binding.btnFAQ.setBackgroundColor(ContextCompat.getColor(this, R.color.iconsBiruza))
+            binding.btnVideos.setBackgroundColor(ContextCompat.getColor(this, R.color.textSecondary))
         }
     }
     override fun onStop() {

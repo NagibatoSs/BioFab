@@ -303,7 +303,7 @@
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_feedback"
             app:iconGravity="textEnd"
-            app:iconPadding="4dp"
+            app:iconPadding="6dp"
             app:iconSize="24sp"
             app:iconTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

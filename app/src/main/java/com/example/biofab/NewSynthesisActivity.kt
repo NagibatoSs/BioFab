@@ -2,6 +2,7 @@ package com.example.biofab
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -9,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import com.example.biofab.databinding.ActivityMainBinding
 import com.example.biofab.databinding.ActivityNewSynthesisBinding
 
@@ -55,7 +57,11 @@ class NewSynthesisActivity : AppCompatActivity() {
         }
 
         binding.btnPause.setOnClickListener {
-            //pauseSynthesis()
+            pauseSynthesis()
+        }
+
+        binding.btnResume.setOnClickListener {
+            resumeSynthesis()
         }
     }
     private fun openMenu(){
@@ -68,14 +74,60 @@ class NewSynthesisActivity : AppCompatActivity() {
 
     private fun startNewSynthesis(){
         binding.btnNewSynthesis.isGone = true;
-        binding.btnPause.isGone = false;
+        binding.btnPause.isVisible = true;
         binding.btnStop.isGone = false;
+        startSynthesisCommand()
     }
 
     private fun stopSynthesis(){
         binding.btnNewSynthesis.isGone = false;
-        binding.btnPause.isGone = true;
+        binding.btnPause.isGone = true
         binding.btnStop.isGone = true;
+        binding.btnResume.isGone = true
+        stopSynthesisCommand()
+    }
+
+    private fun pauseSynthesis(){
+        binding.btnNewSynthesis.isGone = true;
+        binding.btnPause.isGone = true;
+        binding.btnStop.isGone = false;
+        binding.btnResume.isGone = false;
+        pauseSynthesisCommand()
+    }
+
+    private fun resumeSynthesis(){
+        binding.btnResume.isGone = true;
+        binding.btnPause.isGone = false
+        resumeSynthesisCommand()
+    }
+
+    private fun sendCommandJson(json: String) {
+        val gatt = BleManager.bluetoothGatt
+        val ch = BleManager.writeCharacteristic
+
+        if (gatt == null || ch == null || !BleManager.isReady) {
+            Toast.makeText(this, "BLE не готово для отправки команды", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        ch.value = json.toByteArray(Charsets.UTF_8)
+        gatt.writeCharacteristic(ch)
+    }
+
+    private fun startSynthesisCommand() {
+        sendCommandJson("""{"cmd":"start"}""")
+    }
+
+    private fun stopSynthesisCommand() {
+        sendCommandJson("""{"cmd":"stop"}""")
+    }
+
+    private fun pauseSynthesisCommand() {
+        sendCommandJson("""{"cmd":"pause"}""")
+    }
+
+    private fun resumeSynthesisCommand() {
+        sendCommandJson("""{"cmd":"resume"}""")
     }
 
 }

@@ -62,6 +62,16 @@ class MainActivity : AppCompatActivity() {
 
     //private val TARGET_MANUFACTURER_ID = 0x1234
 
+//    private fun connectToSelectedDevice() {
+//        val device = BleManager.selectedDevice
+//        if (device == null) {
+//            Log.e("BLE", "No selected device!")
+//            return
+//        }
+//        BleManager.connect(device, this, gattCallback)
+//        //BleManager.bluetoothGatt = device.connectGatt(this, false, gattCallback)
+//        Log.d("BLE", "Connecting to ${device.address}")
+//    }
     private fun connectToSelectedDevice() {
         val device = BleManager.selectedDevice
         if (device == null) {
@@ -69,8 +79,13 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        BleManager.bluetoothGatt = device.connectGatt(this, false, gattCallback)
-        Log.d("BLE", "Connecting to ${device.address}")
+        if (!BleManager.isConnected()) {
+            BleManager.connect(device, this, gattCallback)
+            Log.d("BLE", "Connecting to ${device.address}")
+        } else {
+            Log.d("BLE", "Already connected to ${device.address}")
+            stateUiConnected()
+        }
     }
 
     private val gattCallback = object : BluetoothGattCallback() {
@@ -214,8 +229,16 @@ class MainActivity : AppCompatActivity() {
         bleScanner = bluetoothAdapter.bluetoothLeScanner
 
         BleManager.selectedDevice = loadSelectedDevice()
-        BleManager.selectedDevice?.let {
-            connectToSelectedDevice() // автоматическое подключение при старте
+//        BleManager.selectedDevice?.let {
+//            connectToSelectedDevice() // автоматическое подключение при старте
+//        }
+        BleManager.selectedDevice?.let { device ->
+            if (BleManager.isConnected()) {
+                stateUiConnected()
+                Log.d("BLE", "Already connected to ${device.address}")
+            } else {
+                connectToSelectedDevice()
+            }
         }
 
         //События
@@ -231,8 +254,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnNewSynthesis.setOnClickListener {
             val intent = Intent(this, NewSynthesisActivity::class.java)
-            sendStart()
-            //startActivity(intent)
+            //sendStart()
+            startActivity(intent)
         }
 
         binding.dashboard.setOnClickListener {
@@ -478,36 +501,45 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun disconnectDevice() {
-        val gatt = BleManager.bluetoothGatt
-        if (gatt != null) {
-            BleManager.notifyCharacteristic?.let { ch ->
-                gatt.setCharacteristicNotification(ch, false)
-                val descriptor = ch.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
-                descriptor?.let {
-                    it.value = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
-                    gatt.writeDescriptor(it)
-                }
-            }
-
-            try {
-                gatt.disconnect()
-                gatt.close()
-            } catch (e: Exception) {
-                Log.e("BLE", "Error disconnecting: ${e.message}")
-            }
-
-            BleManager.bluetoothGatt = null
-            BleManager.writeCharacteristic = null
-            BleManager.notifyCharacteristic = null
+        if (BleManager.isConnected()) {
+            BleManager.disconnect()
+            stateUiDisconnected()
+            Log.d("BLE", "Device disconnected")
+        } else {
+            Log.d("BLE", "No device to disconnect")
         }
-
-        BleManager.selectedDevice = null
-        runOnUiThread { stateUiDisconnected() }
-
-        Log.d("BLE", "Device disconnected")
     }
+//    private fun disconnectDevice() {
+//        val gatt = BleManager.bluetoothGatt
+//        if (gatt != null) {
+//            BleManager.notifyCharacteristic?.let { ch ->
+//                gatt.setCharacteristicNotification(ch, false)
+//                val descriptor = ch.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
+//                descriptor?.let {
+//                    it.value = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
+//                    gatt.writeDescriptor(it)
+//                }
+//            }
+//
+//            try {
+//                gatt.disconnect()
+//                gatt.close()
+//            } catch (e: Exception) {
+//                Log.e("BLE", "Error disconnecting: ${e.message}")
+//            }
+//
+//            BleManager.bluetoothGatt = null
+//            BleManager.writeCharacteristic = null
+//            BleManager.notifyCharacteristic = null
+//        }
+//
+//        BleManager.selectedDevice = null
+//        runOnUiThread { stateUiDisconnected() }
+//
+//        Log.d("BLE", "Device disconnected")
+//    }
     private fun connectMachine(){
-        if (!isConnected)
+        if (!BleManager.isConnected())
         {
             deviceList.clear()
             if (::deviceAdapter.isInitialized) deviceAdapter.clear()
@@ -537,13 +569,4 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-}
-
-object BleManager {
-    var bluetoothGatt: BluetoothGatt? = null
-    var writeCharacteristic: BluetoothGattCharacteristic? = null
-    var notifyCharacteristic: BluetoothGattCharacteristic? = null
-    var selectedDevice: BluetoothDevice? = null
-
-    var isReady = false  // флаг, что характеристики готовы
 }
