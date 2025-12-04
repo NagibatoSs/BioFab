@@ -32,6 +32,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import java.util.UUID
@@ -98,6 +99,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 gatt.discoverServices()
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Disconnected from GATT server", Toast.LENGTH_SHORT).show()
+                }
                 Log.d("BLE", "Disconnected from GATT server")
                 BleManager.bluetoothGatt = null
                 BleManager.isReady = false
@@ -110,10 +114,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+            Log.d("BLE", "onServicesDiscovered called")
             if (status != BluetoothGatt.GATT_SUCCESS) return
 
             var foundWrite: BluetoothGattCharacteristic? = null
             var foundNotify: BluetoothGattCharacteristic? = null
+
 
             for (service in gatt.services) {
                 for (ch in service.characteristics) {
@@ -127,7 +133,8 @@ class MainActivity : AppCompatActivity() {
                         val descriptor = ch.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
                         descriptor?.let {
                             it.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                            gatt.writeDescriptor(it)
+                            Thread.sleep(200)
+                            //gatt.writeDescriptor(it)
                         }
                     }
                 }
@@ -136,7 +143,24 @@ class MainActivity : AppCompatActivity() {
             if (foundWrite != null && foundNotify != null) {
                 BleManager.writeCharacteristic = foundWrite
                 BleManager.notifyCharacteristic = foundNotify
-                BleManager.isReady = true
+
+                BleManager.writeCharacteristic = foundWrite.apply {
+                    writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+                }
+                BleManager.notifyCharacteristic = foundNotify
+                gatt.setCharacteristicNotification(foundNotify, true)
+                val descriptor = foundNotify.getDescriptor(
+                    UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+                )
+                descriptor?.let {
+                    it.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                    gatt.writeDescriptor(it)
+                }
+                //writeCharacteristic?.writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+//                BleManager.writeCharacteristic?.writeType =
+//                    BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+
+                //BleManager.isReady = true
                 runOnUiThread {
                     binding.tvConnection.text = "Подключено"
                     stateUiConnected()
@@ -166,10 +190,16 @@ class MainActivity : AppCompatActivity() {
             status: Int
         ) {
             super.onDescriptorWrite(gatt, descriptor, status)
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.d("BLE", "Descriptor write success: ${descriptor.uuid}")
-            } else {
-                Log.e("BLE", "Descriptor write failed: ${descriptor.uuid}, status=$status")
+            runOnUiThread {
+                if (status == BluetoothGatt.GATT_SUCCESS) {
+                    Log.d("BLE", "Descriptor write success: ${descriptor.uuid}")
+                    //binding.text.text = "Descriptor write success: ${descriptor.uuid}"
+                    Toast.makeText(this@MainActivity, "Descriptor write success: ${descriptor.uuid}", Toast.LENGTH_SHORT).show()
+                    BleManager.isReady = true
+                } else {
+                    Toast.makeText(this@MainActivity, "Descriptor write failed: ${descriptor.uuid}, status=$status", Toast.LENGTH_SHORT).show()
+                    Log.e("BLE", "Descriptor write failed: ${descriptor.uuid}, status=$status")
+                }
             }
         }
     }
@@ -294,7 +324,6 @@ class MainActivity : AppCompatActivity() {
 
         deviceDialog = builder.create()
 
-        // 🔥 ВОТ ЭТА СТРОКА
         deviceDialog?.setCanceledOnTouchOutside(false)
 
         deviceDialog?.show()
