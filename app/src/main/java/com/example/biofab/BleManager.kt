@@ -5,6 +5,9 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import java.util.UUID
 
@@ -26,7 +29,15 @@ object BleManager {
         }
         selectedDevice = device
         gattCallback = callback
-        bluetoothGatt = device.connectGatt(context, false, callback)
+//        Handler(Looper.getMainLooper()).post {
+//            bluetoothGatt = device.connectGatt(context, false, callback)
+//        }
+        bluetoothGatt = device.connectGatt(context, false, callback,BluetoothDevice.TRANSPORT_LE)
+//        bluetoothGatt = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            device.connectGatt(context, false, callback, BluetoothDevice.TRANSPORT_LE)
+//        } else {
+//            device.connectGatt(context, false, callback)
+//        }
     }
 
     /** Безопасное отключение */

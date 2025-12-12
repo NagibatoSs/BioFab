@@ -35,7 +35,9 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.MainScope
 import java.util.UUID
+import javax.security.auth.callback.Callback
 import kotlin.collections.forEach
 
 class MainActivity : AppCompatActivity() {
@@ -50,29 +52,22 @@ class MainActivity : AppCompatActivity() {
 
     // Для хранения найденных устройств
     private val scannedDevices = mutableListOf<BluetoothDevice>()
-    //private var selectedDevice: BluetoothDevice? = null
 
     private var deviceDialog: AlertDialog? = null
     private lateinit var deviceAdapter: ArrayAdapter<String>
     private var deviceList = mutableListOf<BluetoothDevice>()
 
+    //private val WRITE_SERVICE_UUID = UUID.fromString("12345678-0000-1000-8000-00805f9b34fb")
+    //private val WRITE_SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
+    //private val WRITE_CHAR_UUID    = UUID.fromString("12345678-0000-1000-8000-00805f9b34ff")
+
+    //private val WRITE_CHAR_UUID    = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8")
+
     //private var bluetoothGatt: BluetoothGatt? = null
 
-    //private var writeCharacteristic: BluetoothGattCharacteristic? = null
-    //private var notifyCharacteristic: BluetoothGattCharacteristic? = null
 
     //private val TARGET_MANUFACTURER_ID = 0x1234
 
-//    private fun connectToSelectedDevice() {
-//        val device = BleManager.selectedDevice
-//        if (device == null) {
-//            Log.e("BLE", "No selected device!")
-//            return
-//        }
-//        BleManager.connect(device, this, gattCallback)
-//        //BleManager.bluetoothGatt = device.connectGatt(this, false, gattCallback)
-//        Log.d("BLE", "Connecting to ${device.address}")
-//    }
     private fun connectToSelectedDevice() {
         val device = BleManager.selectedDevice
         if (device == null) {
@@ -90,15 +85,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val gattCallback = object : BluetoothGattCallback() {
-
+        override fun onCharacteristicWrite(
+            gatt: BluetoothGatt,
+            characteristic: BluetoothGattCharacteristic,
+            status: Int
+        ) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d("BLE", "Write OK: ${characteristic.uuid}")
+            } else {
+                Log.e("BLE", "Write FAILED: $status")
+            }
+        }
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+            Log.e("BLE", "STATE CHANGE: status=$status, newState=$newState")
+
+            // Если произошла ошибка → показать тост
+            if (status != BluetoothGatt.GATT_SUCCESS) {
+                val reason = mapDisconnectReason(status)
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "Отключено: $reason", Toast.LENGTH_LONG).show()
+                }
+            }
+
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.d("BLE", "Connected to GATT server")
                 runOnUiThread {
                     binding.tvConnection.text = "Подключаемся..."
                 }
                 gatt.discoverServices()
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            }
+
+            else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                Log.e("BLE", "Disconnected: status=$status")
                 runOnUiThread {
                     Toast.makeText(this@MainActivity, "Disconnected from GATT server", Toast.LENGTH_SHORT).show()
                 }
@@ -112,7 +130,64 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        private fun mapDisconnectReason(status: Int): String {
+            return when (status) {
+                0 -> "GATT_SUCCESS (нормальное завершение)"
+                8 -> "GATT_INSUFFICIENT_AUTHENTICATION (нет прав)"
+                19 -> "GATT_CONN_TERMINATE_LOCAL_HOST (приложение разорвало)"
+                22 -> "GATT_CONN_TERMINATE_PEER_USER (устройство закрыло соединение)"
+                34 -> "GATT_CONN_TIMEOUT (таймаут)"
+                62 -> "GATT_CONN_FAIL_ESTABLISH (не удалось установить соединение)"
+                133 -> "GATT_ERROR 133 (классическая BLE ошибка Android)"
+                else -> "Ошибка $status"
+            }
+        }
+//        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+//            if (status != BluetoothGatt.GATT_SUCCESS) return
+//
+//            Log.d("BLE", "Services discovered")
+//
+//            val service = gatt.getService(WRITE_SERVICE_UUID)
+//            if (service == null) {
+//                Log.e("BLE", "Write service NOT found!")
+//                return
+//            }
+//
+//            val writeChar = service.getCharacteristic(WRITE_CHAR_UUID)
+//            if (writeChar == null) {
+//                Log.e("BLE", "Write characteristic NOT found!")
+//                return
+//            }
+//            gatt.setCharacteristicNotification(writeChar, true)
+//
+//            val cccd = writeChar.getDescriptor(
+//                UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+//            )
+//
+//            if (cccd != null) {
+//                cccd.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+//                gatt.writeDescriptor(cccd)
+//                Log.d("BLE", "CCCD write started")
+//            } else {
+//                Log.e("BLE", "CCCD descriptor NOT found!")
+//            }
+//
+//            // сохраняем характеристику
+//            BleManager.writeCharacteristic = writeChar
+//            BleManager.bluetoothGatt = gatt
+//
+//            // тип записи – самый надёжный
+//            writeChar.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+//
+//            BleManager.isReady = true
+//
+//            runOnUiThread {
+//                binding.tvConnection.text = "Подключено"
+//                stateUiConnected()
+//            }
+//
+//            Log.d("BLE", "WRITE characteristic FOUND and ready")
+//        }
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
             Log.d("BLE", "onServicesDiscovered called")
             if (status != BluetoothGatt.GATT_SUCCESS) return
@@ -145,7 +220,7 @@ class MainActivity : AppCompatActivity() {
                 BleManager.notifyCharacteristic = foundNotify
 
                 BleManager.writeCharacteristic = foundWrite.apply {
-                    writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+                    writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
                 }
                 BleManager.notifyCharacteristic = foundNotify
                 gatt.setCharacteristicNotification(foundNotify, true)
@@ -165,8 +240,10 @@ class MainActivity : AppCompatActivity() {
                     binding.tvConnection.text = "Подключено"
                     stateUiConnected()
                 }
+                Toast.makeText(this@MainActivity, "Характеристики write и notify найдены", Toast.LENGTH_SHORT).show()
                 Log.d("BLE", "Write and Notify characteristics FOUND")
             } else {
+                Toast.makeText(this@MainActivity, "Характеристики write и notify не найдены", Toast.LENGTH_LONG).show()
                 Log.e("BLE", "Characteristics not found")
             }
         }
@@ -426,17 +503,20 @@ class MainActivity : AppCompatActivity() {
         }
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
 
+        Toast.makeText(this@MainActivity, "Проверка разрешений", Toast.LENGTH_LONG).show()
         val granted = permissions.all {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
 
         if (!granted) {
+            Toast.makeText(this@MainActivity, "Нет разрешений, они должны сейчас запросится", Toast.LENGTH_LONG).show()
             ActivityCompat.requestPermissions(this, permissions.toTypedArray(), 101)
             return
         }
 
         // Проверяем, включен ли Bluetooth
         if (bluetoothAdapter?.isEnabled != true) {
+            Toast.makeText(this@MainActivity, "Блютуз не включен, сейчас должно попросить включить", Toast.LENGTH_LONG).show()
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivity(enableBtIntent)
             return
@@ -446,21 +526,22 @@ class MainActivity : AppCompatActivity() {
 
         val scanSettings = ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-            .setLegacy(false)  // <- Extended Advertising
+            .setLegacy(false)  //Без нее не находит даже устройства
             .build()
 
         bleScanner?.startScan(null, scanSettings, bleScanCallback)
         Log.d("BLE", "BLE scan started")
 
+        //Смотрит время и если прошло 5 секунд останавливает скан
         binding.root.postDelayed({
             bleScanner?.stopScan(bleScanCallback)
             Log.d("BLE", "BLE scan stopped")
             Log.d("BLE", "Devices found: ${scannedDevices.size}")
-
             showDeviceSelectionDialog()
         }, 5000)
     }
 
+    //вроде юзлес
     private fun checkBlePermissions(): Boolean {
         val permissions = mutableListOf<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -472,7 +553,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
     }
-
+    //и это
     private fun requestBlePermissions() {
         val permissions = mutableListOf<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -482,7 +563,7 @@ class MainActivity : AppCompatActivity() {
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
         ActivityCompat.requestPermissions(this, permissions.toTypedArray(), 101)
     }
-
+    //ЧЕ такое
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -493,6 +574,7 @@ class MainActivity : AppCompatActivity() {
             startBleScan()
         }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -506,7 +588,7 @@ class MainActivity : AppCompatActivity() {
             binding.drawerLayout.openDrawer(GravityCompat.END)
         }
     }
-
+    //Загружает из памяти сохранненный девайс
     private fun loadSelectedDevice(): BluetoothDevice? {
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         val name = sharedPref.getString("device_name", null)
@@ -521,6 +603,7 @@ class MainActivity : AppCompatActivity() {
         return null
     }
 
+    //Сохраняет в память сохраненный девайс
     private fun saveSelectedDevice(device: BluetoothDevice) {
         val sharedPref = getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
         with(sharedPref.edit()) {
@@ -529,6 +612,7 @@ class MainActivity : AppCompatActivity() {
             apply()
         }
     }
+
     private fun disconnectDevice() {
         if (BleManager.isConnected()) {
             BleManager.disconnect()
@@ -538,35 +622,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("BLE", "No device to disconnect")
         }
     }
-//    private fun disconnectDevice() {
-//        val gatt = BleManager.bluetoothGatt
-//        if (gatt != null) {
-//            BleManager.notifyCharacteristic?.let { ch ->
-//                gatt.setCharacteristicNotification(ch, false)
-//                val descriptor = ch.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
-//                descriptor?.let {
-//                    it.value = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
-//                    gatt.writeDescriptor(it)
-//                }
-//            }
-//
-//            try {
-//                gatt.disconnect()
-//                gatt.close()
-//            } catch (e: Exception) {
-//                Log.e("BLE", "Error disconnecting: ${e.message}")
-//            }
-//
-//            BleManager.bluetoothGatt = null
-//            BleManager.writeCharacteristic = null
-//            BleManager.notifyCharacteristic = null
-//        }
-//
-//        BleManager.selectedDevice = null
-//        runOnUiThread { stateUiDisconnected() }
-//
-//        Log.d("BLE", "Device disconnected")
-//    }
+
     private fun connectMachine(){
         if (!BleManager.isConnected())
         {
@@ -587,12 +643,7 @@ class MainActivity : AppCompatActivity() {
                 apply()
             }
 
-            // Если будет реальное подключение BLE
-            // selectedGatt?.disconnect()
-            // selectedGatt = null
             disconnectDevice()
-
-            // Стираем выбранное устройство из памяти
             BleManager.selectedDevice = null
         }
 

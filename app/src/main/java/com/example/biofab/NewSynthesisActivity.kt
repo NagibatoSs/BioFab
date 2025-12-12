@@ -114,29 +114,45 @@ class NewSynthesisActivity : AppCompatActivity() {
 //        ch.value = json.toByteArray(Charsets.UTF_8)
 //        gatt.writeCharacteristic(ch)
 //    }
-private fun sendCommandJson(json: String) {
-    val gatt = BleManager.bluetoothGatt
-    val ch = BleManager.writeCharacteristic
 
-    if (gatt == null || ch == null || !BleManager.isReady) {
-        Toast.makeText(this, "BLE не готово для отправки команды", Toast.LENGTH_SHORT).show()
-        Log.w("BLE", "Cannot send: BLE not ready")
-        return
+    private fun sendCommandJson(json: String) {
+        val gatt = BleManager.bluetoothGatt
+        val ch = BleManager.writeCharacteristic
+
+        if (gatt == null || ch == null) {
+            Log.e("BLE", "Cannot send: GATT or characteristic is null")
+            return
+        }
+
+        ch.value = json.toByteArray(Charsets.UTF_8)
+
+        val success = gatt.writeCharacteristic(ch)
+        Log.d("BLE", "Write start: $success, data=$json")
     }
 
-    val bytes = json.toByteArray(Charsets.UTF_8)
-    val chunkSize = 20 // максимум для большинства микроконтроллеров
-
-    for (i in bytes.indices step chunkSize) {
-        val end = minOf(i + chunkSize, bytes.size)
-        val chunk = bytes.sliceArray(i until end)
-        ch.value = chunk
-        gatt.writeCharacteristic(ch)
-        Thread.sleep(15) // небольшая пауза, чтобы устройство успело принять пакет
-    }
-
-    Log.d("BLE", "Sent JSON in chunks: $json")
-}
+//private fun sendCommandJson(json: String) {
+//    val gatt = BleManager.bluetoothGatt
+//    val ch = BleManager.writeCharacteristic
+//
+//    if (gatt == null || ch == null || !BleManager.isReady) {
+//        Toast.makeText(this, "BLE не готово для отправки команды", Toast.LENGTH_SHORT).show()
+//        Log.w("BLE", "Cannot send: BLE not ready")
+//        return
+//    }
+//
+//    val bytes = json.toByteArray(Charsets.UTF_8)
+//    val chunkSize = 20 // максимум для большинства микроконтроллеров
+//
+//    for (i in bytes.indices step chunkSize) {
+//        val end = minOf(i + chunkSize, bytes.size)
+//        val chunk = bytes.sliceArray(i until end)
+//        ch.value = chunk
+//        gatt.writeCharacteristic(ch)
+//        Thread.sleep(15) // небольшая пауза, чтобы устройство успело принять пакет
+//    }
+//
+//    Log.d("BLE", "Sent JSON in chunks: $json")
+//}
 
     private fun startSynthesisCommand() {
         sendCommandJson("""{"cmd":"start"}""")
