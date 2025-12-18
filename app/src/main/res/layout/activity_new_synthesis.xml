@@ -224,8 +224,7 @@
                 app:tint="@color/iconsBiruza" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:hint="start"
-                android:id="@+id/textInputEditText"
+                android:id="@+id/cmdInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -262,7 +261,7 @@
                 app:layout_constraintBottom_toTopOf="@id/btn_stop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
+                app:layout_constraintTop_toBottomOf="@id/cmdInput" />
 
             <com.google.android.material.button.MaterialButton
                 android:visibility="gone"
@@ -290,7 +289,7 @@
                 app:layout_constraintBottom_toTopOf="@id/btn_stop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
+                app:layout_constraintTop_toBottomOf="@id/cmdInput" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_stop"
@@ -344,7 +343,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textInputEditText" />
+                app:layout_constraintTop_toBottomOf="@id/cmdInput" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -77,7 +77,13 @@ class NewSynthesisActivity : AppCompatActivity() {
         binding.btnNewSynthesis.isGone = true;
         binding.btnPause.isVisible = true;
         binding.btnStop.isGone = false;
-        startSynthesisCommand()
+        val cmd = binding.cmdInput.text.toString().trim()
+        if (cmd.isNotEmpty()) {
+            sendCommand(cmd)
+        }
+        else
+            Toast.makeText(this, "В командной строке пусто, отправлена команда start", Toast.LENGTH_SHORT).show()
+            startSynthesisCommand()
     }
 
     private fun stopSynthesis(){
@@ -85,6 +91,7 @@ class NewSynthesisActivity : AppCompatActivity() {
         binding.btnPause.isGone = true
         binding.btnStop.isGone = true;
         binding.btnResume.isGone = true
+        binding.cmdInput.text?.clear()
         stopSynthesisCommand()
     }
 
@@ -168,6 +175,10 @@ class NewSynthesisActivity : AppCompatActivity() {
 
     private fun resumeSynthesisCommand() {
         sendCommandJson("""{"cmd":"resume"}""")
+    }
+
+    private  fun sendCommand(cmd: String) {
+        sendCommandJson("""{"cmd":"$cmd"}""")
     }
 
 }
