@@ -99,6 +99,7 @@ class NewSynthesisActivity : AppCompatActivity() {
         binding.btnNewSynthesis.isGone = true;
         binding.btnPause.isVisible = true;
         binding.btnStop.isGone = false;
+        startSynthesisCommand()
     }
 
     private fun stopSynthesis(){
