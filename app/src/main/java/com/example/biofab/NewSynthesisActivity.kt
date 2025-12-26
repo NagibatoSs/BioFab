@@ -64,6 +64,9 @@ class NewSynthesisActivity : AppCompatActivity() {
         binding.btnResume.setOnClickListener {
             resumeSynthesis()
         }
+        binding.btnCmd.setOnClickListener {
+            commandSendingBtn()
+        }
     }
     private fun openMenu(){
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
@@ -73,17 +76,29 @@ class NewSynthesisActivity : AppCompatActivity() {
         }
     }
 
+    private fun commandSendingBtn(){
+        val cmd = binding.cmdInput.text.toString().trim()
+        if (cmd.isNotEmpty()) {
+            sendCommand(cmd)
+            Toast.makeText(
+                this,
+                "Команда $cmd успешно отправлена",
+                Toast.LENGTH_SHORT
+            ).show()
+            binding.cmdInput.text?.clear()
+        }
+        else {
+            Toast.makeText(
+                this,
+                "В командной строке пусто, ничего не отправлено",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
     private fun startNewSynthesis(){
         binding.btnNewSynthesis.isGone = true;
         binding.btnPause.isVisible = true;
         binding.btnStop.isGone = false;
-        val cmd = binding.cmdInput.text.toString().trim()
-        if (cmd.isNotEmpty()) {
-            sendCommand(cmd)
-        }
-        else
-            Toast.makeText(this, "В командной строке пусто, отправлена команда start", Toast.LENGTH_SHORT).show()
-            startSynthesisCommand()
     }
 
     private fun stopSynthesis(){
@@ -91,7 +106,6 @@ class NewSynthesisActivity : AppCompatActivity() {
         binding.btnPause.isGone = true
         binding.btnStop.isGone = true;
         binding.btnResume.isGone = true
-        binding.cmdInput.text?.clear()
         stopSynthesisCommand()
     }
 

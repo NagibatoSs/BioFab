@@ -193,9 +193,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
             android:background="@drawable/shape_blocks"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/constraintLayout2">
@@ -210,6 +208,7 @@
                 android:text="Командная строка"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/iv_iconCommand"
                 android:layout_width="30dp"
@@ -235,14 +234,79 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textView6" />
 
+
             <com.google.android.material.button.MaterialButton
-                android:visibility="gone"
-                android:id="@+id/btn_resume"
+                android:id="@+id/btn_cmd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Отправить команду"
+
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:visibility="visible"
+                app:backgroundTint="@color/iconsBiruza"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_play"
+                app:iconGravity="textEnd"
+                app:iconPadding="6dp"
+                app:iconSize="24sp"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cmdInput" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout3">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_new_synthesis"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sf_protext_semibold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="Начать синтез"
+                android:textColor="@color/white"
+
+                android:textSize="18dp"
+                android:visibility="visible"
+                app:backgroundTint="@color/green"
+                app:cornerRadius="10dp"
+                app:icon="@drawable/ic_play"
+                app:iconGravity="textEnd"
+                app:iconPadding="6dp"
+                app:iconSize="24sp"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_resume"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/sf_protext_semibold"
                 android:paddingTop="10dp"
@@ -251,6 +315,7 @@
 
                 android:textColor="@color/white"
                 android:textSize="18dp"
+                android:visibility="gone"
                 app:backgroundTint="@color/orange"
                 app:cornerRadius="10dp"
                 app:icon="@drawable/ic_pause"
@@ -261,24 +326,21 @@
                 app:layout_constraintBottom_toTopOf="@id/btn_stop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cmdInput" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:visibility="gone"
                 android:id="@+id/btn_pause"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/sf_protext_semibold"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="Пауза"
 
+                android:text="Пауза"
                 android:textColor="@color/white"
                 android:textSize="18dp"
+                android:visibility="gone"
                 app:backgroundTint="@color/orange"
                 app:cornerRadius="10dp"
                 app:icon="@drawable/ic_pause"
@@ -289,15 +351,12 @@
                 app:layout_constraintBottom_toTopOf="@id/btn_stop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cmdInput" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_stop"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/sf_protext_semibold"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -315,37 +374,8 @@
                 app:iconTint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:visibility="visible"
-                android:id="@+id/btn_new_synthesis"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="@font/sf_protext_semibold"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:text="Начать синтез"
-
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                app:backgroundTint="@color/iconsBiruza"
-                app:cornerRadius="10dp"
-                app:icon="@drawable/ic_play"
-                app:iconGravity="textEnd"
-                app:iconPadding="6dp"
-                app:iconSize="24sp"
-                app:iconTint="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cmdInput" />
-
-
+                app:layout_constraintTop_toBottomOf="@+id/btn_resume" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

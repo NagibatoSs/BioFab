@@ -57,11 +57,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var deviceAdapter: ArrayAdapter<String>
     private var deviceList = mutableListOf<BluetoothDevice>()
 
-    //private val WRITE_SERVICE_UUID = UUID.fromString("12345678-0000-1000-8000-00805f9b34fb")
-    //private val WRITE_SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b")
-    //private val WRITE_CHAR_UUID    = UUID.fromString("12345678-0000-1000-8000-00805f9b34ff")
-
-    //private val WRITE_CHAR_UUID    = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8")
 
     //private var bluetoothGatt: BluetoothGatt? = null
 
@@ -99,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             Log.e("BLE", "STATE CHANGE: status=$status, newState=$newState")
 
-            // Если произошла ошибка → показать тост
+            // Если произошла ошибка показать тост
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 val reason = mapDisconnectReason(status)
                 runOnUiThread {
@@ -132,16 +127,24 @@ class MainActivity : AppCompatActivity() {
         }
         private fun mapDisconnectReason(status: Int): String {
             return when (status) {
-                0 -> "GATT_SUCCESS (нормальное завершение)"
-                8 -> "GATT_INSUFFICIENT_AUTHENTICATION (нет прав)"
-                19 -> "GATT_CONN_TERMINATE_LOCAL_HOST (приложение разорвало)"
-                22 -> "GATT_CONN_TERMINATE_PEER_USER (устройство закрыло соединение)"
-                34 -> "GATT_CONN_TIMEOUT (таймаут)"
-                62 -> "GATT_CONN_FAIL_ESTABLISH (не удалось установить соединение)"
-                133 -> "GATT_ERROR 133 (классическая BLE ошибка Android)"
+                0 -> "GATT_SUCCESS"
+                8 -> "GATT_INSUFFICIENT_AUTHENTICATION"
+                19 -> "GATT_CONN_TERMINATE_LOCAL_HOST"
+                22 -> "GATT_CONN_TERMINATE_PEER_USER"
+                34 -> "GATT_CONN_TIMEOUT"
+                62 -> "GATT_CONN_FAIL_ESTABLISH"
+                133 -> "GATT_ERROR 133 "
                 else -> "Ошибка $status"
             }
         }
+//        0 -> "GATT_SUCCESS (нормальное завершение)"
+//        8 -> "GATT_INSUFFICIENT_AUTHENTICATION (нет прав)"
+//        19 -> "GATT_CONN_TERMINATE_LOCAL_HOST (приложение разорвало)"
+//        22 -> "GATT_CONN_TERMINATE_PEER_USER (устройство закрыло соединение)"
+//        34 -> "GATT_CONN_TIMEOUT (таймаут)"
+//        62 -> "GATT_CONN_FAIL_ESTABLISH (не удалось установить соединение)"
+//        133 -> "GATT_ERROR 133 "
+//        else -> "Ошибка $status"
 //        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
 //            if (status != BluetoothGatt.GATT_SUCCESS) return
 //
@@ -270,7 +273,6 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     Log.d("BLE", "Descriptor write success: ${descriptor.uuid}")
-                    //binding.text.text = "Descriptor write success: ${descriptor.uuid}"
                     Toast.makeText(this@MainActivity, "Descriptor write success: ${descriptor.uuid}", Toast.LENGTH_SHORT).show()
                     BleManager.isReady = true
                 } else {
@@ -315,7 +317,6 @@ class MainActivity : AppCompatActivity() {
             Log.e("BLE", "Scan failed: $errorCode")
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -423,27 +424,27 @@ class MainActivity : AppCompatActivity() {
             stateUiConnected()
         }
     }
-    private fun sendCommandJson(json: String) {
-        val gatt = BleManager.bluetoothGatt
-        val ch = BleManager.writeCharacteristic
-
-        if (gatt == null || ch == null || !BleManager.isReady) {
-            Log.w("BLE", "Cannot send: BLE not ready")
-            return
-        }
-
-        ch.value = json.toByteArray(Charsets.UTF_8)
-        gatt.writeCharacteristic(ch)
-        Log.d("BLE", "Sent JSON: $json")
-    }
-
-    private fun sendStart() {
-        sendCommandJson("""{"cmd":"start"}""")
-    }
-
-    private fun sendStop() {
-        sendCommandJson("""{"cmd":"stop"}""")
-    }
+//    private fun sendCommandJson(json: String) {
+//        val gatt = BleManager.bluetoothGatt
+//        val ch = BleManager.writeCharacteristic
+//
+//        if (gatt == null || ch == null || !BleManager.isReady) {
+//            Log.w("BLE", "Cannot send: BLE not ready")
+//            return
+//        }
+//
+//        ch.value = json.toByteArray(Charsets.UTF_8)
+//        gatt.writeCharacteristic(ch)
+//        Log.d("BLE", "Sent JSON: $json")
+//    }
+//
+//    private fun sendStart() {
+//        sendCommandJson("""{"cmd":"start"}""")
+//    }
+//
+//    private fun sendStop() {
+//        sendCommandJson("""{"cmd":"stop"}""")
+//    }
 
     private fun stateUiConnected() {
         val drawable = binding.imConnectionCircle.background.mutate() as GradientDrawable
@@ -483,7 +484,6 @@ class MainActivity : AppCompatActivity() {
 
             Log.d("BLE", "Selected: ${BleManager.selectedDevice?.name} - ${BleManager.selectedDevice?.address}")
 
-            // Тут позже будет подключение
             binding.tvConnection.text = "Подключено ${BleManager.selectedDevice?.address}"
         }
 
