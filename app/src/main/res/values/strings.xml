@@ -1,3 +1,21 @@
 <resources>
+    <string name="menu_title">Меню</string>
+    <string name="menu_item_main">Главная</string>
+    <string name="menu_item_training">Обучение</string>
+    <string name="menu_item_synthesis">Синтез</string>
+    <string name="menu_item_info_contacts">Информация и контакты</string>
+
     <string name="app_name">BioFab</string>
+    <string name="header_title">PeptideSynth Pro</string>
+    <string name="header_subtitle">Advanced Synthesis Control</string>
+    <string name="main_welcome_title">Добро пожаловать в PeptideLab!</string>
+    <string name="main_welcome_description">Следите за процессами синтеза и с высокой точностью управляйте своим синтезатором пептидов</string>
+    <string name="status_title">Статус устройства</string>
+    <string name="status_disconnected">Не подключено</string>
+    <string name="status_connected">Подключено</string>
+    <string name="action_connect">Подключить</string>
+    <string name="current_program_title">Текущая программа</string>
+    <string name="last_update_title">Последнее обновление</string>
+    <string name="last_update_date">11.11.2025 22:34</string>
+    <string name="action_new_synthesis">Новый синтез</string>
 </resources>

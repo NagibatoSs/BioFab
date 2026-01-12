@@ -10,7 +10,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.biofab.databinding.ActivityInfoContactsBinding
-import com.example.biofab.databinding.ActivityNewSynthesisBinding
 
 class InfoContactsActivity : AppCompatActivity() {
     private var _binding: ActivityInfoContactsBinding? = null
@@ -22,28 +21,28 @@ class InfoContactsActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false // белый текст
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainContainer)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding.dashboard.setOnClickListener {
+        binding.rightMenuMain.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        binding.training.setOnClickListener {
+        binding.rightMenuTraining.setOnClickListener {
             val intent = Intent(this, TrainingActivity::class.java)
             startActivity(intent)
         }
-        binding.synthesis.setOnClickListener {
+        binding.rightMenuSynthesis.setOnClickListener {
             val intent = Intent(this, NewSynthesisActivity::class.java)
             startActivity(intent)
         }
-        binding.infoContacts.setOnClickListener {
+        binding.rightMenuInfoContacts.setOnClickListener {
             val intent = Intent(this, InfoContactsActivity::class.java)
             startActivity(intent)
         }
-        binding.btnMenu.setOnClickListener {
+        binding.menuButton.setOnClickListener {
             openMenu()
         }
         binding.btnFeedback.setOnClickListener {

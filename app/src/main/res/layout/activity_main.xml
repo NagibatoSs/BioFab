@@ -10,26 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background">
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+        android:id="@+id/mainContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".MainActivity"
     android:background="@color/background">
     
-    <!-- Верхняя панель (header / toolbar) -->
+    <!-- Верхняя панель  -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/headerContainer"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="@color/header_backgroud"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintBottom_toTopOf="@+id/headerDevideLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/flaskIcon"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -39,51 +40,53 @@
             android:scaleType="centerCrop"
             android:src="@drawable/flask"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/linearLayout2"
+            app:layout_constraintEnd_toStartOf="@id/titleTextGroup"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/titleTextGroup"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imageButton"
+            app:layout_constraintStart_toEndOf="@id/flaskIcon"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/titleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sf_protext_regular"
-                android:text="PeptideSynth Pro"
+                android:text="@string/header_title"
                 android:textColor="@color/white" />
 
             <TextView
+                android:id="@+id/titleSubtext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Advanced Synthesis Control"
+                android:text="@string/header_subtitle"
                 style="@style/SecondaryText"
                 android:textSize="10sp" />
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/historyButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:backgroundTint="#00000000"
             android:scaleType="center"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
-            android:src="@drawable/man_avatar_woman_account_people_person_male_interface_profile_user_icon_259529__1_"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:src="@drawable/ic_history2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnMenu"
+            app:layout_constraintEnd_toStartOf="@id/menuButton"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/btnMenu"
+            android:id="@+id/menuButton"
             android:layout_width="54dp"
             android:layout_height="match_parent"
             android:backgroundTint="#00000000"
@@ -99,16 +102,16 @@
 
     <!-- Разделительная линия под шапкой -->
     <View
-        android:id="@+id/view"
+        android:id="@+id/headerDevideLine"
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
         android:background="@color/devide_line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@id/headerContainer" />
 
         <LinearLayout
-            android:id="@+id/linearLayout4"
+            android:id="@+id/infoContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -117,23 +120,24 @@
             android:layout_marginBottom="29dp"
             android:background="@drawable/shape_blocks"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintBottom_toTopOf="@+id/connectionContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view">
+            app:layout_constraintTop_toBottomOf="@+id/headerDevideLine">
 
             <TextView
+                android:id="@+id/infoTitleText"
                 style="@style/HeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
-                android:text="Добро пожаловать в PeptideLab!" />
+                android:text="@string/main_welcome_title" />
 
             <TextView
-                android:id="@+id/text"
+                android:id="@+id/infoSubtitleText"
                 style="@style/SecondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,11 +145,11 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="30dp"
-                android:text="Следите за процессами синтеза и с высокой точностью управляйте своим синтезатором пептидов" />
+                android:text="@string/main_welcome_description" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+            android:id="@+id/connectionContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -156,47 +160,46 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+            app:layout_constraintTop_toBottomOf="@+id/infoContainer">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/connectionTitle"
                 style="@style/HeaderText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Статус устройства"
-                app:layout_constraintBottom_toTopOf="@+id/tvConnection"
+                android:text="@string/status_title"
+                app:layout_constraintBottom_toTopOf="@+id/connectionStatusText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_iconPhone"
+                android:id="@+id/connectionIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:maxHeight="50dp"
                 android:src="@drawable/ic_server"
-                app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                app:layout_constraintBottom_toBottomOf="@+id/connectionTitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/iconsBiruza" />
+                app:tint="@color/cyan" />
 
             <ImageView
-                android:id="@+id/imConnectionCircle"
+                android:id="@+id/connectionStatusCircle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/circle"
-
-                app:layout_constraintEnd_toStartOf="@+id/tvConnection"
+                app:layout_constraintEnd_toStartOf="@+id/connectionStatusText"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"></ImageView>
+                app:layout_constraintTop_toBottomOf="@+id/connectionTitle"/>
 
             <TextView
-                android:id="@+id/tvConnection"
+                android:id="@+id/connectionStatusText"
                 style="@style/BaseText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -205,14 +208,14 @@
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/sf_protext_medium"
-                android:text="Не подключено"
-                app:layout_constraintBottom_toTopOf="@id/btnConnection"
+                android:text="@string/status_disconnected"
+                app:layout_constraintBottom_toTopOf="@id/connectionButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imConnectionCircle"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"></TextView>
+                app:layout_constraintStart_toEndOf="@+id/connectionStatusCircle"
+                app:layout_constraintTop_toBottomOf="@+id/connectionTitle"></TextView>
 
             <Button
-                android:id="@+id/btnConnection"
+                android:id="@+id/connectionButton"
                 style="@style/BaseButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -220,26 +223,15 @@
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/button_biruza"
-                android:text="Подключить"
+                android:text="@string/action_connect"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imConnectionCircle"></Button>
-            <!--        <Switch-->
-            <!--            android:layout_width="wrap_content"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:layout_marginStart="20dp"-->
-            <!--            android:layout_marginTop="10dp"-->
-            <!--            android:layout_marginEnd="34dp"-->
-            <!--            android:layout_marginBottom="30dp"-->
-            <!--            android:textColor="@color/white"-->
-            <!--            android:fontFamily="@font/sf_protext_regular"-->
-            <!--            android:textSize="18dp"-->
-            <!--            android:text="On" />-->
+                app:layout_constraintTop_toBottomOf="@+id/connectionStatusCircle"></Button>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout2"
+            android:id="@+id/currentProgramContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -248,33 +240,33 @@
             android:background="@drawable/shape_blocks"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constraintLayout">
+            app:layout_constraintTop_toBottomOf="@id/connectionContainer">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/currentProgramTitle"
                 style="@style/HeaderText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Текущая программа"
+                android:text="@string/current_program_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
             <ImageView
-                android:id="@+id/iv_iconPhone2"
+                android:id="@+id/currentProgramIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:maxHeight="50dp"
                 android:src="@drawable/ic_pulse"
-                app:layout_constraintBottom_toBottomOf="@+id/textView3"
+                app:layout_constraintBottom_toBottomOf="@+id/currentProgramTitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/iconsBiruza" />
+                app:tint="@color/cyan" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/currentProgramName"
                 style="@style/BaseText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -282,26 +274,27 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:fontFamily="@font/sf_protext_semibold"
-                android:text="ACTH(1-24)"
-                app:layout_constraintBottom_toTopOf="@+id/textView5"
+                tools:text="ACTH(1-24)"
+                app:layout_constraintBottom_toTopOf="@+id/currentProgramLastUpdateText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintTop_toBottomOf="@+id/currentProgramTitle" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/currentProgramLastUpdateText"
                 style="@style/BaseText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:text="Последнее обновление"
+                android:text="@string/last_update_title"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView4" />
+                app:layout_constraintTop_toBottomOf="@id/currentProgramName" />
 
             <TextView
+                android:id="@+id/currentProgramLastUpdateDate"
                 style="@style/SecondaryText"
                 android:layout_width="116dp"
                 android:layout_height="wrap_content"
@@ -309,17 +302,17 @@
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="20dp"
                 android:fontFamily="@font/sf_protext_semibold"
-                android:text="11.11.2025 22:34"
+                android:text="@string/last_update_date"
                 android:textSize="14dp"
                 app:flow_horizontalAlign="end"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView5"
-                app:layout_constraintTop_toTopOf="@+id/textView5" />
+                app:layout_constraintStart_toEndOf="@+id/currentProgramLastUpdateText"
+                app:layout_constraintTop_toTopOf="@+id/currentProgramLastUpdateText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_new_synthesis"
+            android:id="@+id/newSynthesisButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -329,10 +322,10 @@
             android:fontFamily="@font/sf_protext_semibold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Новый синтез"
+            android:text="@string/action_new_synthesis"
             android:textColor="@color/white"
             android:textSize="18sp"
-            app:backgroundTint="@color/iconsBiruza"
+            app:backgroundTint="@color/cyan"
 
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_molnia"
@@ -343,13 +336,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/currentProgramContainer" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <LinearLayout
-        android:id="@+id/right_drawer"
+        android:id="@+id/rightMenuContainer"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
@@ -361,33 +354,31 @@
         android:paddingEnd="0dp"
         android:elevation="12dp">
 
-        <!-- Заголовок меню -->
         <TextView
-            android:id="@+id/menuTitle"
+            android:id="@+id/rightMenuTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Меню"
+            android:text="@string/menu_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:paddingBottom="10dp"
             android:layout_marginStart="26dp"
             android:fontFamily="@font/sf_protext_bold"
-            android:textColor="@color/iconsBiruza" />
+            android:textColor="@color/cyan" />
 
-        <!-- Пункт меню -->
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/dashboard"
+            android:id="@+id/rightMenuMain"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/sf_protext_semibold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Главная"
+            android:text="@string/menu_item_main"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textAlignment="viewStart"
-            app:backgroundTint="@color/iconsBiruza"
+            app:backgroundTint="@color/cyan"
 
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_home"
@@ -402,7 +393,7 @@
             android:fontFamily="@font/sf_protext_semibold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Обучение"
+            android:text="@string/menu_item_training"
             android:textColor="@color/textSecondary"
             android:textSize="15sp"
             android:textAlignment="viewStart"
@@ -414,7 +405,7 @@
             app:iconPadding="4dp"
             app:iconSize="22sp"
             app:iconTint="@color/textSecondary"
-            android:id="@+id/training"/>
+            android:id="@+id/rightMenuTraining"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
@@ -422,7 +413,7 @@
             android:fontFamily="@font/sf_protext_semibold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Синтез"
+            android:text="@string/menu_item_synthesis"
             android:textColor="@color/textSecondary"
             android:textSize="15sp"
             android:textAlignment="viewStart"
@@ -434,7 +425,7 @@
             app:iconPadding="4dp"
             app:iconSize="22sp"
             app:iconTint="@color/textSecondary"
-            android:id="@+id/synthesis"/>
+            android:id="@+id/rightMenuSynthesis"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
@@ -442,20 +433,17 @@
             android:fontFamily="@font/sf_protext_semibold"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:text="Информация и контакты"
+            android:text="@string/menu_item_info_contacts"
             android:textColor="@color/textSecondary"
             android:textSize="15sp"
             android:textAlignment="viewStart"
             android:backgroundTint="#00000000"
-
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_info"
             app:iconGravity="textStart"
             app:iconPadding="6dp"
             app:iconSize="22sp"
             app:iconTint="@color/textSecondary"
-            android:id="@+id/infoContacts"/>
-
-
+            android:id="@+id/rightMenuInfoContacts"/>
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

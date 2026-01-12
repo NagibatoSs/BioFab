@@ -40,7 +40,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/headerDevideLine"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/devide_line" />

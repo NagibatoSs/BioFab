@@ -11,8 +11,6 @@ import android.bluetooth.le.BluetoothLeScanner
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -34,11 +32,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.MainScope
 import java.util.UUID
-import javax.security.auth.callback.Callback
-import kotlin.collections.forEach
 
 class MainActivity : AppCompatActivity() {
 
@@ -105,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.d("BLE", "Connected to GATT server")
                 runOnUiThread {
-                    binding.tvConnection.text = "Подключаемся..."
+                    binding.connectionStatusText.text = "Подключаемся..."
                 }
                 gatt.discoverServices()
             }
@@ -120,7 +114,7 @@ class MainActivity : AppCompatActivity() {
                 BleManager.isReady = false
 
                 runOnUiThread {
-                    binding.tvConnection.text = "Отключено"
+                    binding.connectionStatusText.text = "Отключено"
                     stateUiDisconnected()
                 }
             }
@@ -240,7 +234,7 @@ class MainActivity : AppCompatActivity() {
 
                 //BleManager.isReady = true
                 runOnUiThread {
-                    binding.tvConnection.text = "Подключено"
+                    binding.connectionStatusText.text = "Подключено"
                     stateUiConnected()
                 }
                 Toast.makeText(this@MainActivity, "Характеристики write и notify найдены", Toast.LENGTH_SHORT).show()
@@ -325,7 +319,7 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false // белый текст
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainContainer)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -350,35 +344,35 @@ class MainActivity : AppCompatActivity() {
         }
 
         //События
-        binding.btnConnection.setOnClickListener {
+        binding.connectionButton.setOnClickListener {
             //startBleScan()
             //connectMachine()
             connectMachine()
         }
 
-        binding.btnMenu.setOnClickListener {
+        binding.menuButton.setOnClickListener {
             openMenu()
         }
 
-        binding.btnNewSynthesis.setOnClickListener {
+        binding.newSynthesisButton.setOnClickListener {
             val intent = Intent(this, NewSynthesisActivity::class.java)
             //sendStart()
             startActivity(intent)
         }
 
-        binding.dashboard.setOnClickListener {
+        binding.rightMenuMain.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        binding.training.setOnClickListener {
+        binding.rightMenuTraining.setOnClickListener {
             val intent = Intent(this, TrainingActivity::class.java)
             startActivity(intent)
         }
-        binding.synthesis.setOnClickListener {
+        binding.rightMenuSynthesis.setOnClickListener {
             val intent = Intent(this, NewSynthesisActivity::class.java)
             startActivity(intent)
         }
-        binding.infoContacts.setOnClickListener {
+        binding.rightMenuInfoContacts.setOnClickListener {
             val intent = Intent(this, InfoContactsActivity::class.java)
             startActivity(intent)
         }
@@ -412,7 +406,7 @@ class MainActivity : AppCompatActivity() {
             BleManager.selectedDevice = dev
 
             Log.d("BLE", "Selected device: ${dev.name} - ${dev.address}")
-            binding.tvConnection.text = "Выбрано: ${dev.name ?: "Unknown"}"
+            binding.connectionStatusText.text = "Подключено: ${dev.name ?: "Unknown"}"
 
             saveSelectedDevice(dev)   // сохраняем устройство локально
 
@@ -447,21 +441,21 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     private fun stateUiConnected() {
-        val drawable = binding.imConnectionCircle.background.mutate() as GradientDrawable
+        val drawable = binding.connectionStatusCircle.background.mutate() as GradientDrawable
         drawable.setColor(ContextCompat.getColor(this, R.color.green))
-        binding.btnConnection.text = "Отключить"
-        val drawableBtn = binding.btnConnection.background.mutate() as GradientDrawable
+        binding.connectionButton.text = "Отключить"
+        val drawableBtn = binding.connectionStatusCircle.background.mutate() as GradientDrawable
         drawableBtn.setColor(ContextCompat.getColor(this, R.color.textSecondary))
         isConnected = true
     }
 
     private  fun stateUiDisconnected() {
-        binding.tvConnection.text = "Не подключено"
-        val drawable = binding.imConnectionCircle.background.mutate() as GradientDrawable
+        binding.connectionStatusText.text = "Не подключено"
+        val drawable = binding.connectionStatusCircle.background.mutate() as GradientDrawable
         drawable.setColor(ContextCompat.getColor(this, R.color.red))
-        binding.btnConnection.text = "Подключить"
-        val drawableBtn = binding.btnConnection.background.mutate() as GradientDrawable
-        drawableBtn.setColor(ContextCompat.getColor(this, R.color.iconsBiruza))
+        binding.connectionStatusText.text = "Подключить"
+        val drawableBtn = binding.connectionStatusCircle.background.mutate() as GradientDrawable
+        drawableBtn.setColor(ContextCompat.getColor(this, R.color.cyan))
 
         isConnected = false
     }
@@ -484,7 +478,7 @@ class MainActivity : AppCompatActivity() {
 
             Log.d("BLE", "Selected: ${BleManager.selectedDevice?.name} - ${BleManager.selectedDevice?.address}")
 
-            binding.tvConnection.text = "Подключено ${BleManager.selectedDevice?.address}"
+            binding.connectionStatusText.text = "Подключено ${BleManager.selectedDevice?.address}"
         }
 
         builder.setNegativeButton("Отмена") { dialog, _ ->
@@ -503,7 +497,6 @@ class MainActivity : AppCompatActivity() {
         }
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
 
-        Toast.makeText(this@MainActivity, "Проверка разрешений", Toast.LENGTH_LONG).show()
         val granted = permissions.all {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
         }
@@ -514,9 +507,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Проверяем, включен ли Bluetooth
         if (bluetoothAdapter?.isEnabled != true) {
-            Toast.makeText(this@MainActivity, "Блютуз не включен, сейчас должно попросить включить", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, "Bluetooth не включен", Toast.LENGTH_LONG).show()
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivity(enableBtIntent)
             return
@@ -596,7 +588,7 @@ class MainActivity : AppCompatActivity() {
 
         if (address != null) {
             val device = bluetoothAdapter.getRemoteDevice(address)
-            binding.tvConnection.text = "Подключено ${name ?: "Unknown"}"
+            binding.connectionStatusText.text = "Подключено ${name ?: "Unknown"}"
             stateUiConnected()
             return device
         }

@@ -11,24 +11,24 @@
         android:layout_height="match_parent"
         android:background="@color/background">
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".NewSynthesisActivity">
 
         <!-- Верхняя панель (header / toolbar) -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/headerContainer"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:background="@color/header_backgroud"
-            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintBottom_toTopOf="@+id/headerDevideLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/flaskIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
@@ -38,19 +38,19 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/flask"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/linearLayout2"
+                app:layout_constraintEnd_toStartOf="@id/titleTextGroup"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
+                android:id="@+id/titleTextGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/imageButton"
+                app:layout_constraintStart_toEndOf="@id/flaskIcon"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
@@ -69,7 +69,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/imageButton3"
+                android:id="@+id/historyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:backgroundTint="#00000000"
@@ -78,11 +78,11 @@
                 android:scaleY="0.8"
                 android:src="@drawable/man_avatar_woman_account_people_person_male_interface_profile_user_icon_259529__1_"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btnMenu"
+                app:layout_constraintEnd_toStartOf="@id/menuButton"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/btnMenu"
+                android:id="@+id/menuButton"
                 android:layout_width="54dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="#00000000"
@@ -98,16 +98,16 @@
 
         <!-- Разделительная линия под шапкой -->
         <View
-            android:id="@+id/view"
+            android:id="@+id/headerDevideLine"
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
             android:background="@color/devide_line"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@id/headerContainer" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout2"
+            android:id="@+id/currentProgramContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -116,7 +116,7 @@
             android:background="@drawable/shape_blocks"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout">
+            app:layout_constraintTop_toBottomOf="@id/headerContainer">
 
             <ImageView
                 android:id="@+id/ic_book"
@@ -127,13 +127,13 @@
                 android:maxHeight="50dp"
                 android:src="@drawable/ic_info"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView3"
+                app:layout_constraintEnd_toStartOf="@+id/currentProgramTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/iconsBiruza" />
+                app:tint="@color/cyan" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/currentProgramTitle"
                 style="@style/HeaderText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -146,7 +146,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/currentProgramName"
                 style="@style/SecondaryText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/ic_book"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintTop_toBottomOf="@+id/currentProgramTitle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -173,7 +173,7 @@
             android:src="@drawable/qr_biofab"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constraintLayout2" />
+            app:layout_constraintTop_toBottomOf="@id/currentProgramContainer" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
@@ -201,7 +201,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_iconPhone"
+                android:id="@+id/connectionIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
@@ -210,7 +210,7 @@
                 android:src="@drawable/ic_telephone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_contacts"
-                app:tint="@color/iconsBiruza" />
+                app:tint="@color/cyan" />
 
             <TextView
                 android:id="@+id/tv_telephone"
@@ -220,7 +220,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
                 android:text="Телефон"
-                app:layout_constraintStart_toEndOf="@+id/iv_iconPhone"
+                app:layout_constraintStart_toEndOf="@+id/connectionIcon"
                 app:layout_constraintTop_toBottomOf="@id/tv_contacts"></TextView>
 
             <TextView
@@ -243,7 +243,7 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_telephone"
                 app:layout_constraintTop_toBottomOf="@+id/tv_number" />
             <ImageView
-                android:id="@+id/iv_iconPhone2"
+                android:id="@+id/currentProgramIcon"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
@@ -252,7 +252,7 @@
                 android:src="@drawable/ic_email"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_number2"
-                app:tint="@color/iconsBiruza" />
+                app:tint="@color/cyan" />
 
             <TextView
                 android:id="@+id/tv_email"
@@ -296,7 +296,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/iconsBiruza"
+            android:backgroundTint="@color/cyan"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="Обратная связь"
@@ -315,7 +315,7 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/right_drawer"
+        android:id="@+id/rightMenuContainer"
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
@@ -329,7 +329,7 @@
 
         <!-- Заголовок меню -->
         <TextView
-            android:id="@+id/menuTitle"
+            android:id="@+id/rightMenuTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Меню"
@@ -338,13 +338,13 @@
             android:paddingBottom="10dp"
             android:layout_marginStart="26dp"
             android:fontFamily="@font/sf_protext_bold"
-            android:textColor="@color/iconsBiruza" />
+            android:textColor="@color/cyan" />
 
         <!-- Пункт меню -->
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/dashboard"
+            android:id="@+id/rightMenuMain"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/sf_protext_semibold"
             android:paddingTop="10dp"
@@ -380,7 +380,7 @@
             app:iconPadding="4dp"
             app:iconSize="22sp"
             app:iconTint="@color/textSecondary"
-            android:id="@+id/training"/>
+            android:id="@+id/rightMenuTraining"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
@@ -400,7 +400,7 @@
             app:iconPadding="4dp"
             app:iconSize="22sp"
             app:iconTint="@color/textSecondary"
-            android:id="@+id/synthesis"/>
+            android:id="@+id/rightMenuSynthesis"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
@@ -412,7 +412,7 @@
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textAlignment="viewStart"
-            android:backgroundTint="@color/iconsBiruza"
+            android:backgroundTint="@color/cyan"
 
             app:cornerRadius="10dp"
             app:icon="@drawable/ic_info"
@@ -420,6 +420,6 @@
             app:iconPadding="6dp"
             app:iconSize="22sp"
             app:iconTint="@color/white"
-            android:id="@+id/infoContacts"/>
+            android:id="@+id/rightMenuInfoContacts"/>
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
