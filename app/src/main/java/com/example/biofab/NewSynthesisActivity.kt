@@ -2,6 +2,7 @@ package com.example.biofab
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,8 +13,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import com.example.biofab.databinding.ActivityNewSynthesisBinding
-
+private const val DEFAULT_VALUE_AMINO_COUNT = 1
+private const val DEFAULT_VALUE_MASS_COUNT = 500
 class NewSynthesisActivity : AppCompatActivity() {
     private var _binding: ActivityNewSynthesisBinding? = null
     private val binding
@@ -29,6 +32,18 @@ class NewSynthesisActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        binding.aminoCountSlider.value = DEFAULT_VALUE_AMINO_COUNT.toFloat()
+        binding.aminoCountNumber.setText(DEFAULT_VALUE_AMINO_COUNT.toString())
+
+        binding.massCountSlider.value = DEFAULT_VALUE_MASS_COUNT.toFloat()
+        binding.massCountNumber.setText(DEFAULT_VALUE_MASS_COUNT.toString())
+
+        binding.historyButton.setOnClickListener {
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.rightMenuMain.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -49,11 +64,13 @@ class NewSynthesisActivity : AppCompatActivity() {
             openMenu()
         }
         binding.newSynthesisButton.setOnClickListener {
+            hideStartParamsContainer()
             startNewSynthesis()
         }
 
         binding.btnStop.setOnClickListener {
             stopSynthesis()
+            showStartParamsContainer()
         }
 
         binding.btnPause.setOnClickListener {
@@ -66,6 +83,62 @@ class NewSynthesisActivity : AppCompatActivity() {
         binding.btnCmd.setOnClickListener {
             commandSendingBtn()
         }
+        binding.aminoCountSlider.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                binding.aminoCountNumber.setText(value.toInt().toString())
+            }
+        }
+        binding.aminoCountNumber.doAfterTextChanged {
+            val number = it.toString().toIntOrNull() ?: return@doAfterTextChanged
+            binding.aminoCountSlider.value = number.toFloat()
+        }
+        binding.aminoCountNumber.filters = arrayOf(
+            InputFilter { source, _, _, dest, _, _ ->
+                val newText = dest.toString() + source.toString()
+                val value = newText.toIntOrNull()
+                if (value == null || value < 1 || value > 6) {
+                    ""
+                } else {
+                    null
+                }
+            }
+        )
+
+        binding.massCountSlider.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                binding.massCountNumber.setText(value.toInt().toString())
+            }
+        }
+
+        binding.massCountNumber.doAfterTextChanged {
+            val number = it.toString().toIntOrNull() ?: return@doAfterTextChanged
+            binding.massCountSlider.value = number.toFloat()
+        }
+        binding.massCountNumber.filters = arrayOf(
+            InputFilter { source, _, _, dest, _, _ ->
+                val newText = dest.toString() + source.toString()
+                val value = newText.toIntOrNull()
+                if (value == null || value < 200 || value > 1000) {
+                    ""
+                } else {
+                    null
+                }
+            }
+        )
+    }
+
+    private fun hideStartParamsContainer(){
+        binding.startParamsContainer.isGone = true;
+    }
+    private fun showStartParamsContainer(){
+        binding.startParamsContainer.isGone = false;
+    }
+
+    private fun hidePauseParamsContainer(){
+        binding.pauseParamsContainer.isGone = true;
+    }
+    private fun showPauseParamsContainer(){
+        binding.pauseParamsContainer.isGone = false;
     }
     private fun openMenu(){
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
@@ -102,25 +175,28 @@ class NewSynthesisActivity : AppCompatActivity() {
     }
 
     private fun stopSynthesis(){
-        binding.newSynthesisButton.isGone = false;
+        binding.newSynthesisButton.isGone = false
         binding.btnPause.isGone = true
-        binding.btnStop.isGone = true;
+        binding.btnStop.isGone = true
         binding.btnResume.isGone = true
         stopSynthesisCommand()
+        hidePauseParamsContainer()
     }
 
     private fun pauseSynthesis(){
-        binding.newSynthesisButton.isGone = true;
-        binding.btnPause.isGone = true;
-        binding.btnStop.isGone = false;
-        binding.btnResume.isGone = false;
+        binding.newSynthesisButton.isGone = true
+        binding.btnPause.isGone = true
+        binding.btnStop.isGone = false
+        binding.btnResume.isGone = false
         pauseSynthesisCommand()
+        showPauseParamsContainer()
     }
 
     private fun resumeSynthesis(){
-        binding.btnResume.isGone = true;
+        binding.btnResume.isGone = true
         binding.btnPause.isGone = false
         resumeSynthesisCommand()
+        hidePauseParamsContainer()
     }
 
     private fun sendCommandJson(json: String) {

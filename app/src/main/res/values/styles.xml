@@ -61,4 +61,15 @@
         <item name="android:textColor">@color/white</item>           <!-- цвет текста -->
     </style>
 
+    <style name="CustomSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <!-- Размер -->
+
+        <item name="android:showText">false</item>
+
+        <item name="android:padding">0dp</item>
+        <item name="switchPadding">0dp</item>
+
+        <item name="trackTint">@color/textSecondary</item>
+        <item name="thumbTint">@color/cyan</item>
+    </style>
 </resources>
