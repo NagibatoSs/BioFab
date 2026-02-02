@@ -72,4 +72,25 @@
         <item name="trackTint">@color/textSecondary</item>
         <item name="thumbTint">@color/cyan</item>
     </style>
+
+    <style name="ChipBlock" parent="Widget.MaterialComponents.Chip.Choice">\
+        <item name="chipStartPadding">12dp</item>
+        <item name="chipEndPadding">12dp</item>
+
+
+        <item name="android:layout_height">48dp</item>
+        <item name="android:gravity">center</item>
+
+
+        <item name="chipCornerRadius">24dp</item>
+        <item name="chipStrokeWidth">1dp</item>
+
+        <item name="chipBackgroundColor">@color/chip_background_selector</item>
+        <item name="chipStrokeColor">@color/chip_background_selector</item>
+        <item name="android:textColor">@color/chip_text_selector</item>
+
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+
 </resources>

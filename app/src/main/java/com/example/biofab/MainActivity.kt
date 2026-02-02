@@ -32,6 +32,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.example.biofab.BleManager.writeCharacteristic
 import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
@@ -73,7 +74,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val gattCallback = object : BluetoothGattCallback() {
+
+    val gattCallback = object : BluetoothGattCallback() {
         override fun onCharacteristicWrite(
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic,
@@ -84,10 +86,24 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.e("BLE", "Write FAILED: $status")
             }
-        }
-        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-            Log.e("BLE", "STATE CHANGE: status=$status, newState=$newState")
 
+            // --- обработка очереди ---
+            if (BleManager.commandQueue.isNotEmpty()) {
+                val next = BleManager.commandQueue.removeAt(0)
+                writeCharacteristic?.value = next.toByteArray(Charsets.UTF_8)
+                BleManager.isWriting = true
+                gatt.writeCharacteristic(writeCharacteristic)
+            } else {
+                BleManager.isWriting = false
+            }
+        }
+
+        override fun onConnectionStateChange(
+            gatt: BluetoothGatt,
+            status: Int,
+            newState: Int
+        ) {
+            Log.e("BLE", "STATE CHANGE: status=$status, newState=$newState")
             // Если произошла ошибка показать тост
             if (status != BluetoothGatt.GATT_SUCCESS) {
                 val reason = mapDisconnectReason(status)
@@ -117,8 +133,55 @@ class MainActivity : AppCompatActivity() {
                     binding.connectionStatusText.text = "Отключено"
                     stateUiDisconnected()
                 }
-            }
         }
+    }
+
+//    private val gattCallback = object : BluetoothGattCallback() {
+//        override fun onCharacteristicWrite(
+//            gatt: BluetoothGatt,
+//            characteristic: BluetoothGattCharacteristic,
+//            status: Int
+//        ) {
+//            if (status == BluetoothGatt.GATT_SUCCESS) {
+//                Log.d("BLE", "Write OK: ${characteristic.uuid}")
+//            } else {
+//                Log.e("BLE", "Write FAILED: $status")
+//            }
+//        }
+//        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+//            Log.e("BLE", "STATE CHANGE: status=$status, newState=$newState")
+//
+//            // Если произошла ошибка показать тост
+//            if (status != BluetoothGatt.GATT_SUCCESS) {
+//                val reason = mapDisconnectReason(status)
+//                runOnUiThread {
+//                    Toast.makeText(this@MainActivity, "Отключено: $reason", Toast.LENGTH_LONG).show()
+//                }
+//            }
+//
+//            if (newState == BluetoothProfile.STATE_CONNECTED) {
+//                Log.d("BLE", "Connected to GATT server")
+//                runOnUiThread {
+//                    binding.connectionStatusText.text = "Подключаемся..."
+//                }
+//                gatt.discoverServices()
+//            }
+//
+//            else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+//                Log.e("BLE", "Disconnected: status=$status")
+//                runOnUiThread {
+//                    Toast.makeText(this@MainActivity, "Disconnected from GATT server", Toast.LENGTH_SHORT).show()
+//                }
+//                Log.d("BLE", "Disconnected from GATT server")
+//                BleManager.bluetoothGatt = null
+//                BleManager.isReady = false
+//
+//                runOnUiThread {
+//                    binding.connectionStatusText.text = "Отключено"
+//                    stateUiDisconnected()
+//                }
+//            }
+//        }
         private fun mapDisconnectReason(status: Int): String {
             return when (status) {
                 0 -> "GATT_SUCCESS"

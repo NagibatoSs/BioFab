@@ -1,7 +1,9 @@
 package com.example.biofab
 
+import ChipAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputFilter
 import android.util.Log
 import android.widget.Toast
@@ -15,6 +17,9 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.example.biofab.databinding.ActivityNewSynthesisBinding
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.GridLayoutManager
+import android.text.TextWatcher
 private const val DEFAULT_VALUE_AMINO_COUNT = 1
 private const val DEFAULT_VALUE_MASS_COUNT = 500
 class NewSynthesisActivity : AppCompatActivity() {
@@ -32,6 +37,7 @@ class NewSynthesisActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
 
         binding.aminoCountSlider.value = DEFAULT_VALUE_AMINO_COUNT.toFloat()
         binding.aminoCountNumber.setText(DEFAULT_VALUE_AMINO_COUNT.toString())
@@ -125,6 +131,40 @@ class NewSynthesisActivity : AppCompatActivity() {
                 }
             }
         )
+
+        val recyclerView = findViewById<RecyclerView>(R.id.motorTypesRecycler)
+        recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 колонки
+
+        val items = listOf("DCM", "TFA", "TEA", "DIC", "OUT", "MIX")
+        val adapter = ChipAdapter(items) { selected ->
+            Log.d("ChipSelected", "Выбрано: $selected")
+        }
+        recyclerView.adapter = adapter
+
+        binding.casseteInput.doAfterTextChanged { editable ->
+            val text = editable?.toString() ?: return@doAfterTextChanged
+            if (text.isEmpty()) return@doAfterTextChanged
+
+            val value = text.toIntOrNull() ?: return@doAfterTextChanged
+
+            if (value !in 1..10) {
+                binding.casseteInput.setText("10")
+                binding.casseteInput.setSelection(2)
+            }
+        }
+
+        binding.motorMlInput.doAfterTextChanged { editable ->
+            val text = editable?.toString() ?: return@doAfterTextChanged
+            if (text.isEmpty()) return@doAfterTextChanged
+
+            val value = text.toIntOrNull() ?: return@doAfterTextChanged
+
+            if (value !in 1..100) {
+                binding.motorMlInput.setText("100")
+                binding.motorMlInput.setSelection(3)
+            }
+        }
+
     }
 
     private fun hideStartParamsContainer(){
@@ -199,40 +239,44 @@ class NewSynthesisActivity : AppCompatActivity() {
         hidePauseParamsContainer()
     }
 
-    private fun sendCommandJson(json: String) {
-        val gatt = BleManager.bluetoothGatt
-        val ch = BleManager.writeCharacteristic
+//    private fun sendCommandJson(json: String) {
+//        val gatt = BleManager.bluetoothGatt
+//        val ch = BleManager.writeCharacteristic
+//
+//        if (gatt == null || ch == null) {
+//            Toast.makeText(this, "BLE не готово для отправки команды", Toast.LENGTH_SHORT).show()
+//            Log.e("BLE", "Cannot send: GATT or characteristic is null")
+//            return
+//        }
+//
+//        ch.value = json.toByteArray(Charsets.UTF_8)
+//
+//        val success = gatt.writeCharacteristic(ch)
+//        Log.d("BLE", "Write start: $success, data=$json")
+//    }
 
-        if (gatt == null || ch == null) {
-            Toast.makeText(this, "BLE не готово для отправки команды", Toast.LENGTH_SHORT).show()
-            Log.e("BLE", "Cannot send: GATT or characteristic is null")
-            return
-        }
 
-        ch.value = json.toByteArray(Charsets.UTF_8)
-
-        val success = gatt.writeCharacteristic(ch)
-        Log.d("BLE", "Write start: $success, data=$json")
-    }
 
     private fun startSynthesisCommand() {
-        sendCommandJson("""{"cmd":"start"}""")
+        BleManager.sendCommand("""{"cmd":"start"}""")
+        BleManager.sendCommand("""{"aa":"${binding.aminoCountSlider.value.toInt()}"}""")
+        BleManager.sendCommand("""{"mass":"${binding.massCountSlider.value.toInt()}"}""")
     }
 
     private fun stopSynthesisCommand() {
-        sendCommandJson("""{"cmd":"stop"}""")
+        BleManager.sendCommand("""{"cmd":"stop"}""")
     }
 
     private fun pauseSynthesisCommand() {
-        sendCommandJson("""{"cmd":"pause"}""")
+        BleManager.sendCommand("""{"cmd":"pause"}""")
     }
 
     private fun resumeSynthesisCommand() {
-        sendCommandJson("""{"cmd":"resume"}""")
+        BleManager.sendCommand("""{"cmd":"resume"}""")
     }
 
     private  fun sendCommand(cmd: String) {
-        sendCommandJson("""{"cmd":"$cmd"}""")
+        BleManager.sendCommand("""{"cmd":"$cmd"}""")
     }
 
 }

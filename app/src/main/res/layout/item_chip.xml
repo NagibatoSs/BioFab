@@ -1,0 +1,27 @@
+<com.google.android.material.chip.Chip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/chipItem"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:gravity="center"
+    android:text="DCM"
+    android:layout_marginHorizontal="10dp"
+
+    android:textAlignment="center"
+
+    app:chipIconVisible="false"
+    app:checkedIconVisible="false"
+
+    android:textColor="@color/chip_text_selector"
+    app:chipBackgroundColor="@color/chip_background_selector"
+    app:chipCornerRadius="24dp"
+    android:checkable="true"
+
+    app:chipStrokeColor="@color/chip_stroke_selector"
+    app:chipStrokeWidth="1dp"
+
+
+
+    style="@style/BaseText" />

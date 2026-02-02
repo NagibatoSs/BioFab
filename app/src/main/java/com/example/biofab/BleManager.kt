@@ -5,9 +5,11 @@ import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattDescriptor
+import android.bluetooth.BluetoothProfile
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import java.util.UUID
 
@@ -18,6 +20,8 @@ object BleManager {
     var notifyCharacteristic: BluetoothGattCharacteristic? = null
     var selectedDevice: BluetoothDevice? = null
     var isReady = false
+
+    val commandQueue = mutableListOf<String>()
 
     private var gattCallback: BluetoothGattCallback? = null
 
@@ -76,4 +80,87 @@ object BleManager {
     fun isConnected(): Boolean {
         return bluetoothGatt != null
     }
+
+    var isWriting = false
+
+//    val gattCallback = object : BluetoothGattCallback() {
+//        override fun onCharacteristicWrite(
+//            gatt: BluetoothGatt,
+//            characteristic: BluetoothGattCharacteristic,
+//            status: Int
+//        ) {
+//            if (status == BluetoothGatt.GATT_SUCCESS) {
+//                Log.d("BLE", "Write OK: ${characteristic.uuid}")
+//            } else {
+//                Log.e("BLE", "Write FAILED: $status")
+//            }
+//
+//            // --- обработка очереди ---
+//            if (commandQueue.isNotEmpty()) {
+//                val next = commandQueue.removeAt(0)
+//                writeCharacteristic?.value = next.toByteArray(Charsets.UTF_8)
+//                isWriting = true
+//                gatt.writeCharacteristic(writeCharacteristic)
+//            } else {
+//                isWriting = false
+//            }
+//        }
+//
+//        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+//            Log.e("BLE", "STATE CHANGE: status=$status, newState=$newState")
+//
+//            // Если произошла ошибка показать тост
+//            if (status != BluetoothGatt.GATT_SUCCESS) {
+//                val reason = mapDisconnectReason(status)
+//            }
+//
+//            if (newState == BluetoothProfile.STATE_CONNECTED) {
+//                Log.d("BLE", "Connected to GATT server")
+//
+//                gatt.discoverServices()
+//            }
+//
+//            else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+//                Log.e("BLE", "Disconnected: status=$status")
+//
+//                Log.d("BLE", "Disconnected from GATT server")
+//                BleManager.bluetoothGatt = null
+//                BleManager.isReady = false
+//
+//            }
+//        }
+//    }
+
+    fun sendCommand(json: String) {
+        val gatt = bluetoothGatt
+        val ch = writeCharacteristic
+        if (gatt == null || ch == null) {
+            Log.e("BLE", "Cannot send: GATT or characteristic is null")
+            return
+        }
+
+        // если уже идёт запись — добавляем в очередь
+        if (isWriting) {
+            commandQueue.add(json)
+            Log.d("BLE", "GATT busy, command queued: $json")
+        } else {
+            ch.value = json.toByteArray(Charsets.UTF_8)
+            isWriting = true
+            gatt.writeCharacteristic(ch)
+            Log.d("BLE", "Command sent immediately: $json")
+        }
+    }
+//    private fun mapDisconnectReason(status: Int): String {
+//        return when (status) {
+//            0 -> "GATT_SUCCESS"
+//            8 -> "GATT_INSUFFICIENT_AUTHENTICATION"
+//            19 -> "GATT_CONN_TERMINATE_LOCAL_HOST"
+//            22 -> "GATT_CONN_TERMINATE_PEER_USER"
+//            34 -> "GATT_CONN_TIMEOUT"
+//            62 -> "GATT_CONN_FAIL_ESTABLISH"
+//            133 -> "GATT_ERROR 133 "
+//            else -> "Ошибка $status"
+//        }
+//    }
 }
+
