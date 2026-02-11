@@ -5,11 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background">
+        android:background="@color/background"
+        android:fitsSystemWindows="true"
+        android:fillViewport="true">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
@@ -312,7 +316,7 @@
                 <EditText
                     android:id="@+id/aminoCountNumber"
                     style="@style/BaseText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:background="@null"
@@ -339,7 +343,7 @@
                 <com.google.android.material.slider.Slider
                     android:id="@+id/aminoCountSlider"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:stepSize="1"
@@ -372,7 +376,7 @@
                 <EditText
                     android:id="@+id/massCountNumber"
                     style="@style/BaseText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:background="@null"
@@ -390,9 +394,9 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:stepSize="100"
-                    android:value="500"
                     android:valueFrom="200"
                     android:valueTo="1000"
+                    android:value="500"
                     app:haloColor="#A1528694"
                     app:labelBehavior="gone"
                     app:layout_constraintEnd_toEndOf="parent"

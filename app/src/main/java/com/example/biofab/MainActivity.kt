@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity() {
         val drawable = binding.connectionStatusCircle.background.mutate() as GradientDrawable
         drawable.setColor(ContextCompat.getColor(this, R.color.red))
         binding.connectionButton.text = "Подключить"
-        val drawableBtn = binding.connectionStatusCircle.background.mutate() as GradientDrawable
+        val drawableBtn = binding.connectionButton.background.mutate() as GradientDrawable
         drawableBtn.setColor(ContextCompat.getColor(this, R.color.cyan))
         connectedUI = false
     }
@@ -351,7 +351,7 @@ class MainActivity : AppCompatActivity() {
         val drawable = binding.connectionStatusCircle.background.mutate() as GradientDrawable
         drawable.setColor(ContextCompat.getColor(this@MainActivity, R.color.green))
         binding.connectionButton.text = "Отключить"
-        val drawableBtn = binding.connectionStatusCircle.background.mutate() as GradientDrawable
+        val drawableBtn = binding.connectionButton.background.mutate() as GradientDrawable
         drawableBtn.setColor(ContextCompat.getColor(this@MainActivity, R.color.textSecondary))
         connectedUI = true
     }

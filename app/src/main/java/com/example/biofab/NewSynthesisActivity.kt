@@ -1,6 +1,7 @@
 package com.example.biofab
 
 import ChipAdapter
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -20,6 +21,10 @@ import com.example.biofab.databinding.ActivityNewSynthesisBinding
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.GridLayoutManager
 import android.text.TextWatcher
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import androidx.core.widget.doOnTextChanged
+
 private const val DEFAULT_VALUE_AMINO_COUNT = 1
 private const val DEFAULT_VALUE_MASS_COUNT = 500
 class NewSynthesisActivity : AppCompatActivity() {
@@ -89,19 +94,36 @@ class NewSynthesisActivity : AppCompatActivity() {
         binding.btnCmd.setOnClickListener {
             commandSendingBtn()
         }
+
+        binding.aminoCountSlider.apply {
+            valueFrom = 1f
+            valueTo = 6f
+            stepSize = 1f
+            value = DEFAULT_VALUE_AMINO_COUNT.toFloat()   // ← ОБЯЗАТЕЛЬНО
+        }
+
         binding.aminoCountSlider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
                 binding.aminoCountNumber.setText(value.toInt().toString())
             }
         }
-        binding.aminoCountNumber.doAfterTextChanged {
-            val number = it.toString().toIntOrNull() ?: return@doAfterTextChanged
-            binding.aminoCountSlider.value = number.toFloat()
+
+        binding.aminoCountNumber.doAfterTextChanged { editable ->
+            val text = editable?.toString() ?: return@doAfterTextChanged
+            val number = text.toIntOrNull()
+            if (number != null && number in 1..6) {
+                binding.aminoCountSlider.value = number.toFloat()
+            }
         }
         binding.aminoCountNumber.filters = arrayOf(
-            InputFilter { source, _, _, dest, _, _ ->
-                val newText = dest.toString() + source.toString()
+            InputFilter { source, start, end, dest, dstart, dend ->
+
+                val newText = dest.substring(0, dstart) +
+                        source.substring(start, end) +
+                        dest.substring(dend)
+
                 val value = newText.toIntOrNull()
+
                 if (value == null || value < 1 || value > 6) {
                     ""
                 } else {
@@ -109,6 +131,44 @@ class NewSynthesisActivity : AppCompatActivity() {
                 }
             }
         )
+        binding.aminoCountNumber.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                binding.scrollView.post {
+                    binding.scrollView.smoothScrollTo(0, v.top)
+                }
+            }
+        }
+
+//        binding.aminoCountSlider.addOnChangeListener { _, value, fromUser ->
+//            if (fromUser) {
+//                binding.aminoCountNumber.setText(value.toInt().toString())
+//            }
+//        }
+//        binding.aminoCountNumber.doAfterTextChanged {
+//            val number = it.toString().toIntOrNull() ?: return@doAfterTextChanged
+//            binding.aminoCountSlider.value = number.toFloat()
+//        }
+//        binding.aminoCountNumber.filters = arrayOf(
+//            InputFilter { source, start, end, dest, dstart, dend ->
+//                val newText = dest.toString().substring(0, dstart) +
+//                        source.toString().substring(start, end) +
+//                        dest.toString().substring(dend)
+//                val value = newText.toIntOrNull()
+//                if (value == null || value < 1 || value > 6) {
+//                    ""
+//                } else {
+//                    null
+//                }
+//            }
+//        )
+
+
+        binding.massCountSlider.apply {
+            valueFrom = 200f
+            valueTo = 1000f
+            stepSize = 100f
+            value = DEFAULT_VALUE_MASS_COUNT.toFloat()
+        }
 
         binding.massCountSlider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
@@ -116,21 +176,50 @@ class NewSynthesisActivity : AppCompatActivity() {
             }
         }
 
-        binding.massCountNumber.doAfterTextChanged {
-            val number = it.toString().toIntOrNull() ?: return@doAfterTextChanged
-            binding.massCountSlider.value = number.toFloat()
+        binding.massCountNumber.doAfterTextChanged { editable ->
+            val text = editable?.toString() ?: return@doAfterTextChanged
+            val number = text.toIntOrNull() ?: return@doAfterTextChanged
+            if (number in 0..1000) {
+                val sliderStep = 200
+                var sliderValue = (number / sliderStep) * sliderStep
+                // Ограничиваем слайдер в его диапазоне
+                sliderValue = sliderValue.coerceIn(binding.massCountSlider.valueFrom.toInt(), binding.massCountSlider.valueTo.toInt())
+                binding.massCountSlider.value = sliderValue.toFloat()
+            }
         }
         binding.massCountNumber.filters = arrayOf(
-            InputFilter { source, _, _, dest, _, _ ->
-                val newText = dest.toString() + source.toString()
+            InputFilter { source, start, end, dest, dstart, dend ->
+
+                val newText = dest.substring(0, dstart) +
+                        source.substring(start, end) +
+                        dest.substring(dend)
+
                 val value = newText.toIntOrNull()
-                if (value == null || value < 200 || value > 1000) {
+
+                if (value == null || value < 0 || value > 1000) {
                     ""
                 } else {
                     null
                 }
             }
         )
+
+
+//        binding.massCountNumber.doAfterTextChanged {
+//            val number = it.toString().toIntOrNull() ?: return@doAfterTextChanged
+//            binding.massCountSlider.value = number.toFloat()
+//        }
+//        binding.massCountNumber.filters = arrayOf(
+//            InputFilter { source, _, _, dest, _, _ ->
+//                val newText = dest.toString() + source.toString()
+//                val value = newText.toIntOrNull()
+//                if (value == null || value < 200 || value > 1000) {
+//                    ""
+//                } else {
+//                    null
+//                }
+//            }
+//        )
 
         val recyclerView = findViewById<RecyclerView>(R.id.motorTypesRecycler)
         recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 колонки
@@ -149,7 +238,6 @@ class NewSynthesisActivity : AppCompatActivity() {
 
             if (value !in 1..10) {
                 binding.casseteInput.setText("10")
-                binding.casseteInput.setSelection(2)
             }
         }
 
@@ -164,7 +252,6 @@ class NewSynthesisActivity : AppCompatActivity() {
                 binding.motorMlInput.setSelection(3)
             }
         }
-
     }
 
     private fun hideStartParamsContainer(){
@@ -238,24 +325,6 @@ class NewSynthesisActivity : AppCompatActivity() {
         resumeSynthesisCommand()
         hidePauseParamsContainer()
     }
-
-//    private fun sendCommandJson(json: String) {
-//        val gatt = BleManager.bluetoothGatt
-//        val ch = BleManager.writeCharacteristic
-//
-//        if (gatt == null || ch == null) {
-//            Toast.makeText(this, "BLE не готово для отправки команды", Toast.LENGTH_SHORT).show()
-//            Log.e("BLE", "Cannot send: GATT or characteristic is null")
-//            return
-//        }
-//
-//        ch.value = json.toByteArray(Charsets.UTF_8)
-//
-//        val success = gatt.writeCharacteristic(ch)
-//        Log.d("BLE", "Write start: $success, data=$json")
-//    }
-
-
 
     private fun startSynthesisCommand() {
         BleManager.sendCommand("""{"cmd":"start"}""")

@@ -18,7 +18,6 @@ object BleDeviceStore {
         )
 
     fun save(context: Context, device: BluetoothDevice) {
-
         prefs(context).edit()
             .putString(KEY_NAME, device.name)
             .putString(KEY_ADDRESS, device.address)
